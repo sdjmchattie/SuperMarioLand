@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://djpajwie83xoj"]
+
+[ext_resource type="FontFile" uid="uid://bcc2wklnb8usx" path="res://marioland_font.png" id="1_vv6wv"]
+
+[resource]
+default_font = ExtResource("1_vv6wv")
+default_font_size = 8

@@ -1,0 +1,25 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://bcc2wklnb8usx"
+path="res://.godot/imported/marioland_font.png-2574fd4d1b3ea10c3d4a49a52eceaf13.fontdata"
+
+[deps]
+
+source_file="res://marioland_font.png"
+dest_files=["res://.godot/imported/marioland_font.png-2574fd4d1b3ea10c3d4a49a52eceaf13.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("\'0\'-\'9\'", "\'A\'-\'Z\'", "\'.\'", "\',\'", "\'!\'", "\'?\'", "\'[\'", "\']\'", "\'x\'", "\'-\'", "\'c\'", "\'h\'", "\' \'")
+kerning_pairs=PackedStringArray()
+columns=10
+rows=5
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+ascent=0
+descent=0
+fallbacks=[]
+compress=true
+scaling_mode=2
