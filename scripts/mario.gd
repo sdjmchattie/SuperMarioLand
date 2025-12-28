@@ -4,8 +4,6 @@ extends CharacterBody2D
 
 const SPEED = 60.0
 const JUMP_VELOCITY = -250.0
-const HALF_WIDTH = 80.0
-const LEFT_MARGIN = 4.0
 
 @onready var sprite: Sprite2D = $SmallSprite
 
@@ -25,13 +23,10 @@ func _physics_process(delta: float) -> void:
 		sprite.flip_h = direction < 0
 		velocity.x = direction * SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = 0
 
-	# Stop at left margin
-	if global_position.x + velocity.x * delta <= camera.global_position.x + LEFT_MARGIN:
+	var new_x = position.x + velocity.x * delta
+	if not camera.update_mario_pos(new_x):
 		velocity.x = 0
 
 	move_and_slide()
-
-	if global_position.x > camera.global_position.x + HALF_WIDTH:
-		camera.global_position.x = global_position.x - HALF_WIDTH
