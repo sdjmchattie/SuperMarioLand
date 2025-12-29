@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=4 uid="uid://crvqkrhgrjff7"]
+[gd_scene load_steps=10 format=4 uid="uid://crvqkrhgrjff7"]
 
 [ext_resource type="Texture2D" uid="uid://dlgs54t8yv3ko" path="res://images/world-1-1-background.png" id="1_uoemn"]
-[ext_resource type="Script" uid="uid://ckhecfv6miw8t" path="res://level_state.gd" id="1_vcawh"]
 [ext_resource type="Script" uid="uid://br1a8a2nsj54d" path="res://scripts/camera.gd" id="2_8w7le"]
 [ext_resource type="Texture2D" uid="uid://bclyftu8v17e0" path="res://images/world-1-1-obstacles.png" id="2_nd25n"]
 [ext_resource type="Script" uid="uid://nlix1k1hrlgr" path="res://scripts/mario.gd" id="2_vxf0e"]
@@ -66,13 +65,6 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_w0h35")
 
 [node name="World-1-1" type="Node2D"]
-
-[node name="LevelState" type="Node" parent="."]
-script = ExtResource("1_vcawh")
-
-[node name="Timer" type="Timer" parent="LevelState"]
-wait_time = 0.667
-autostart = true
 
 [node name="LevelBackground" type="TextureRect" parent="."]
 offset_right = 2400.0
@@ -144,5 +136,3 @@ offset_right = 160.0
 offset_bottom = 16.0
 text = "400"
 autowrap_mode = 0
-
-[connection signal="timeout" from="LevelState/Timer" to="LevelState" method="_on_time_decrease"]

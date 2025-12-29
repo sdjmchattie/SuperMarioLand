@@ -9,17 +9,14 @@ func _ready():
 	# Persistent game state
 	GameState.score_changed.connect(_on_score_changed)
 	GameState.lives_changed.connect(_on_lives_changed)
-
-	# Level-local (find controller in scene tree)
-	var level := get_tree().get_current_scene().get_node("LevelState")
-	level.time_changed.connect(_on_time_changed)
-	level.coins_changed.connect(_on_coins_changed)
+	GameState.time_changed.connect(_on_time_changed)
+	GameState.coins_changed.connect(_on_coins_changed)
 
 	# Initial draw
 	_on_score_changed(GameState.score)
 	_on_lives_changed(GameState.lives)
-	_on_time_changed(level.time_remaining)
-	_on_coins_changed(level.coins)
+	_on_time_changed(GameState.time_remaining)
+	_on_coins_changed(GameState.coins)
 
 func _on_score_changed(score: int):
 	score_label.text = "%d" % score
