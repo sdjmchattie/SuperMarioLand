@@ -15,7 +15,7 @@ enum MarioState {
 @export var terminal_ledge_fall_speed := 175.0
 @export var apex_gravity := 550.0
 @export var max_jump_time := 0.2
-@export var horizontal_speed = 60.0
+@export var horizontal_speed := 60.0
 
 @onready var sprite: Sprite2D = $SmallSprite
 @onready var animator: AnimationPlayer = $AnimationPlayer
