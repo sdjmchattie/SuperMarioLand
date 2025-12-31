@@ -25,4 +25,8 @@ func _jump_sprite() -> void:
 	tween.tween_property(sprite, "position:y", sprite.position.y, BUMP_SPEED).as_relative().set_delay(BUMP_SPEED)
 
 func on_bumped() -> void:
-	_jump_sprite()
+	if (
+		GameState.powerup == GameState.Powerup.NONE and
+		type in [Type.QUESTION, Type.BRICK]
+	):
+		_jump_sprite()
