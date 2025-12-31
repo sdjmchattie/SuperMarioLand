@@ -11,9 +11,9 @@ enum MarioState {
 }
 
 @export var camera: Camera2D
-@export var terminal_jump_speed := 110.0
+@export var terminal_jump_speed := 108.0
 @export var terminal_ledge_fall_speed := 175.0
-@export var apex_gravity := 575.0
+@export var apex_gravity := 550.0
 @export var max_jump_time := 0.2
 @export var horizontal_speed := 60.0
 
