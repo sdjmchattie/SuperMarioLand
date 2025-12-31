@@ -76,12 +76,11 @@ _data = {
 &"walk": SubResource("Animation_xjvui")
 }
 
-[node name="Mario" type="CharacterBody2D" node_paths=PackedStringArray("camera")]
+[node name="Mario" type="CharacterBody2D"]
 z_index = 60
 collision_layer = 2
 collision_mask = 29
 script = ExtResource("1_bvgp0")
-camera = NodePath("")
 
 [node name="SmallSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_5gbmu")
@@ -91,6 +90,12 @@ vframes = 3
 [node name="SmallCollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4.1)
 shape = SubResource("RectangleShape2D_w0h35")
+
+[node name="SmallBlockRay" type="RayCast2D" parent="."]
+position = Vector2(3, -2)
+target_position = Vector2(-6, 0)
+collision_mask = 4
+hit_from_inside = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

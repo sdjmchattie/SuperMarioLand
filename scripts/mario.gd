@@ -18,6 +18,7 @@ enum MarioState {
 @export var horizontal_speed := 60.0
 
 @onready var sprite: Sprite2D = $SmallSprite
+@onready var block_ray: RayCast2D = $SmallBlockRay
 @onready var animator: AnimationPlayer = $AnimationPlayer
 
 var mario_state: MarioState = MarioState.ON_GROUND
@@ -62,6 +63,14 @@ func _horizontal_movement(delta: float) -> void:
 	if not camera.update_mario_pos(new_left, new_right):
 		velocity.x = 0.0
 
+func _check_block_bumps() -> void:
+	if velocity.y > 0:
+		return
+
+	if block_ray.is_colliding():
+		block_ray.get_collider().on_bumped()
+		_transition_jump_descent()
+
 func _check_grounded() -> void:
 	if is_on_floor():
 		velocity.y = 0.0
@@ -77,6 +86,10 @@ func _transition_ledge_descent() -> void:
 	mario_state = MarioState.LEDGE_DESCENT
 	animator.pause()
 	velocity.y = terminal_ledge_fall_speed
+
+func _transition_jump_descent() -> void:
+	mario_state = MarioState.JUMP_DESCENT
+	velocity.y = terminal_jump_speed
 
 func _physics_on_ground(delta: float) -> void:
 	_horizontal_movement(delta)
@@ -96,6 +109,7 @@ func _physics_on_ground(delta: float) -> void:
 func _physics_jump_ascent(delta: float) -> void:
 	_horizontal_movement(delta)
 	move_and_slide()
+	_check_block_bumps()
 
 	jump_timer += delta
 	if not Input.is_action_pressed("jump") or jump_timer >= max_jump_time:
@@ -105,16 +119,14 @@ func _physics_jump_ascent(delta: float) -> void:
 func _physics_jump_apex(delta: float) -> void:
 	velocity.y += apex_gravity * delta
 	if velocity.y >= terminal_jump_speed:
-		velocity.y = terminal_jump_speed
-		mario_state = MarioState.JUMP_DESCENT
+		_transition_jump_descent()
 
 	_horizontal_movement(delta)
 	move_and_slide()
-
+	_check_block_bumps()
 	_check_grounded()
 
 func _physics_descent(delta: float) -> void:
 	_horizontal_movement(delta)
 	move_and_slide()
-
 	_check_grounded()
