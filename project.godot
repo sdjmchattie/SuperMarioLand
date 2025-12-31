@@ -66,6 +66,14 @@ select={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="World"
+2d_physics/layer_2="Mario"
+2d_physics/layer_3="Blocks"
+2d_physics/layer_4="Enemies"
+2d_physics/layer_5="Hazards"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
