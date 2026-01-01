@@ -9,6 +9,8 @@ enum Type {
 	HIDDEN,
 }
 
+const CoinScene := preload("res://scenes/powerups/coin.tscn")
+
 const BUMP_SPEED := 0.07
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -24,9 +26,20 @@ func _jump_sprite() -> void:
 	tween.tween_property(sprite, "position:y", sprite.position.y - 4, BUMP_SPEED).as_relative()
 	tween.tween_property(sprite, "position:y", sprite.position.y, BUMP_SPEED).as_relative().set_delay(BUMP_SPEED)
 
+func _spawn_coin() -> void:
+	GameState.coins += 1
+	var coin = CoinScene.instantiate()
+	coin.position = Vector2i.ZERO
+	coin.position.y -= 7
+	add_child(coin)
+
 func on_bumped() -> void:
 	if (
 		GameState.powerup == GameState.Powerup.NONE and
 		type in [Type.QUESTION, Type.BRICK]
 	):
 		_jump_sprite()
+
+	match spawns:
+		"Coin":
+			_spawn_coin()
