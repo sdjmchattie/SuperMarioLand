@@ -24,7 +24,8 @@ func _ready() -> void:
 func _jump_sprite() -> void:
 	var tween = create_tween()
 	tween.tween_property(sprite, "position:y", sprite.position.y - 4, BUMP_SPEED).as_relative()
-	tween.tween_property(sprite, "position:y", sprite.position.y, BUMP_SPEED).as_relative().set_delay(BUMP_SPEED)
+	tween.tween_property(sprite, "position:y", sprite.position.y + 4, BUMP_SPEED).as_relative()
+	tween.finished.connect(func (): sprite.frame = type)
 
 func _spawn_coin() -> void:
 	GameState.coins += 1
@@ -34,6 +35,9 @@ func _spawn_coin() -> void:
 	add_child(coin)
 
 func on_bumped() -> void:
+	if type == Type.USED:
+		return
+
 	if (
 		GameState.powerup == GameState.Powerup.NONE and
 		type in [Type.QUESTION, Type.BRICK]
@@ -43,3 +47,6 @@ func on_bumped() -> void:
 	match spawns:
 		"Coin":
 			_spawn_coin()
+
+	if GameState.powerup == GameState.Powerup.NONE:
+		type = Type.USED
