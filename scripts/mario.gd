@@ -17,12 +17,27 @@ enum MarioState {
 @export var max_jump_time := 0.2
 @export var horizontal_speed := 60.0
 
-@onready var sprite: Sprite2D = $SmallSprite
+@onready var sprites: Array[Sprite2D] = [$SmallSprite, $LargeSprite]
 @onready var block_ray: RayCast2D = $SmallBlockRay
-@onready var animator: AnimationPlayer = $AnimationPlayer
+@onready var movement_animator: AnimationPlayer = $MovementAnimation
+@onready var powerup_animator: AnimationPlayer = $PowerupAnimation
 
 var mario_state: MarioState = MarioState.ON_GROUND
+var half_width: float
 var jump_timer = 0.0
+
+func grab_mushroom() -> void:
+	GameState.powerup = GameState.Powerup.MUSHROOM
+	block_ray = $LargeBlockRay
+	powerup_animator.play("Grow To Large")
+
+func _ready() -> void:
+	half_width = (
+		float(sprites[0].texture.get_width()) /
+		sprites[0].hframes *
+		sprites[0].scale.x *
+		0.5
+	)
 
 func _physics_process(delta: float) -> void:
 	match mario_state:
@@ -46,18 +61,13 @@ func _horizontal_movement(delta: float) -> void:
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis("move_left", "move_right")
 	if direction:
-		sprite.flip_h = direction < 0
+		for sprite in sprites:
+			sprite.flip_h = direction < 0
 		velocity.x = direction * horizontal_speed
 	else:
 		velocity.x = 0.0
 
 	var distance_x = velocity.x * delta
-	var half_width = (
-		float(sprite.texture.get_width()) /
-		sprite.hframes *
-		sprite.scale.x *
-		0.5
-	)
 	var new_left = position.x + distance_x - half_width
 	var new_right = position.x + distance_x + half_width
 	if not camera.update_mario_pos(new_left, new_right):
@@ -78,13 +88,13 @@ func _check_grounded() -> void:
 
 func _transition_jump_ascent() -> void:
 	mario_state = MarioState.JUMP_ASCENT
-	animator.play("jump")
+	movement_animator.play("jump")
 	velocity.y = -1 * terminal_jump_speed
 	jump_timer = 0.0
 
 func _transition_ledge_descent() -> void:
 	mario_state = MarioState.LEDGE_DESCENT
-	animator.pause()
+	movement_animator.pause()
 	velocity.y = terminal_ledge_fall_speed
 
 func _transition_jump_descent() -> void:
@@ -96,9 +106,9 @@ func _physics_on_ground(delta: float) -> void:
 	move_and_slide()
 
 	if not Input.get_axis("move_left", "move_right"):
-		animator.play("idle")
+		movement_animator.play("idle")
 	else:
-		animator.play("walk")
+		movement_animator.play("walk")
 
 	if Input.is_action_just_pressed("jump"):
 		_transition_jump_ascent()

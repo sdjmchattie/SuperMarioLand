@@ -7,12 +7,12 @@
 size = Vector2(8, 8)
 
 [node name="Block" type="StaticBody2D"]
+z_index = 50
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_cgrg5")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-z_index = 50
 texture = ExtResource("1_8r6n6")
 hframes = 5
 vframes = 2
