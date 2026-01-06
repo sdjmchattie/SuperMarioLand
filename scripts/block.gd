@@ -10,6 +10,7 @@ enum Type {
 }
 
 const CoinScene := preload("res://scenes/powerups/coin.tscn")
+const MushroomScene := preload("res://scenes/powerups/mushroom.tscn")
 
 const BUMP_SPEED := 0.07
 
@@ -37,19 +38,29 @@ func _spawn_coin() -> void:
 		type = Type.USED
 
 	var coin = CoinScene.instantiate()
-	coin.position = Vector2i.ZERO
+	coin.position = global_position
 	coin.position.y -= 7
-	add_child(coin)
+	get_tree().current_scene.add_child(coin)
+
+func _spawn_mushroom() -> void:
+	type = Type.USED
+
+	var mushroom = MushroomScene.instantiate()
+	mushroom.position = global_position
+	get_tree().current_scene.add_child(mushroom)
 
 func on_bumped() -> void:
 	if type == Type.USED:
 		return
 
-	if (
-		GameState.powerup == GameState.Powerup.NONE and
-		type in [Type.QUESTION, Type.BRICK]
-	):
-		_jump_sprite()
+	match type:
+		Type.BRICK:
+			if GameState.powerup == GameState.Powerup.NONE or spawns != "":
+				_jump_sprite()
+			else:
+				pass
+		Type.QUESTION:
+			_jump_sprite()
 
 	match spawns:
 		"Coin":
@@ -59,3 +70,9 @@ func on_bumped() -> void:
 			if coin_timer.is_stopped():
 				coin_timer.start()
 			_spawn_coin()
+		"Upgrade":
+			_spawn_mushroom()
+		"Life":
+			pass
+		"Invincibility":
+			pass
