@@ -35,6 +35,7 @@ func _jump_sprite() -> void:
 
 func _spawn_coin() -> void:
 	GameState.coins += 1
+	GameState.score += 100
 	if _timer_triggered:
 		type = Type.USED
 
