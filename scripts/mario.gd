@@ -31,6 +31,9 @@ func grab_mushroom() -> void:
 	block_ray = $LargeBlockRay
 	powerup_animator.play("Grow To Large")
 
+func grab_extra_life() -> void:
+	GameState.lives += 1
+
 func _ready() -> void:
 	half_width = (
 		float(sprites[0].texture.get_width()) /

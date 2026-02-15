@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://cy1rkydqwn1j2"]
+
+[ext_resource type="Texture2D" uid="uid://dr8u753myfnxa" path="res://images/powerups.png" id="1_f5x2k"]
+[ext_resource type="Script" uid="uid://lny5oeesq8gh" path="res://scripts/powerups/extra_life.gd" id="1_mfqnl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g8vf4"]
+size = Vector2(6, 8)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bk05x"]
+radius = 4.0
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+z_index = 45
+collision_layer = 0
+script = ExtResource("1_mfqnl")
+
+[node name="ExtraLife" type="Sprite2D" parent="."]
+texture = ExtResource("1_f5x2k")
+hframes = 3
+vframes = 3
+frame = 6
+
+[node name="Square" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_g8vf4")
+
+[node name="CollectionArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="Circle" type="CollisionShape2D" parent="CollectionArea"]
+shape = SubResource("CircleShape2D_bk05x")
+debug_color = Color(0.84549963, 0.37853408, 0, 0.41960785)
+
+[connection signal="body_entered" from="CollectionArea" to="." method="_on_collection"]
