@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctk7jmi87fw8v"]
+
+[ext_resource type="Texture2D" uid="uid://b802orwpmdbgr" path="res://images/points.png" id="1_texture"]
+[ext_resource type="Script" uid="uid://cdg8q3nvd27v0" path="res://scripts/points.gd" id="2_script"]
+
+[node name="Points" type="Sprite2D"]
+texture_filter = 1
+texture = ExtResource("1_texture")
+vframes = 6
+script = ExtResource("2_script")
+
+[node name="FreeTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="FreeTimer" to="." method="_on_free_timer_timeout"]
