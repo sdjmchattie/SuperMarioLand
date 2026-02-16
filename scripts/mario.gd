@@ -31,17 +31,14 @@ var jump_timer = 0.0
 func grab_mushroom() -> void:
 	GameState.powerup = GameState.Powerup.MUSHROOM
 	GameState.score += 1000
+	_show_points(1000)
+
 	block_ray = $LargeBlockRay
 	powerup_animator.play("Grow To Large")
 
-	var points = PointsScene.instantiate()
-	points.set_value(1000)
-	points.position.x = position.x - half_width + 8.0
-	points.position.y = position.y - 11.0
-	get_tree().current_scene.add_child(points)
-
 func grab_extra_life() -> void:
 	GameState.lives += 1
+	_show_points()
 
 func _ready() -> void:
 	half_width = (
@@ -67,6 +64,13 @@ func _physics_process(delta: float) -> void:
 			pass
 		MarioState.DEAD:
 			pass
+
+func _show_points(points: int = 0) -> void:
+	var point_scene = PointsScene.instantiate()
+	point_scene.set_value(points)
+	point_scene.position.x = position.x - half_width + 8.0
+	point_scene.position.y = position.y - 11.0
+	get_tree().current_scene.add_child(point_scene)
 
 func _horizontal_movement(delta: float) -> void:
 		# Get the input direction and handle the movement/deceleration.

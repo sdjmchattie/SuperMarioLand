@@ -6,7 +6,7 @@
 [node name="Points" type="Sprite2D"]
 texture_filter = 1
 texture = ExtResource("1_texture")
-vframes = 6
+vframes = 7
 script = ExtResource("2_script")
 
 [node name="FreeTimer" type="Timer" parent="."]

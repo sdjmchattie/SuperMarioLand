@@ -14,13 +14,13 @@ func _process(delta: float) -> void:
 func set_value(points: int) -> void:
 	# Map point value to sprite frame
 	match points:
-		100: frame = 0
-		200: frame = 1
-		400: frame = 2
-		500: frame = 3
-		800: frame = 4
-		1000: frame = 5
-		_: frame = 0  # Default to 100
+		100: frame = 1
+		200: frame = 2
+		400: frame = 3
+		500: frame = 4
+		800: frame = 5
+		1000: frame = 6
+		_: frame = 0  # Default to 1UP
 
 func _on_free_timer_timeout() -> void:
 	queue_free()
