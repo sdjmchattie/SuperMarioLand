@@ -10,6 +10,8 @@ enum MarioState {
 	DEAD,
 }
 
+const PointsScene := preload("res://scenes/points.tscn")
+
 @export var camera: Camera2D
 @export var terminal_jump_speed := 108.0
 @export var terminal_ledge_fall_speed := 175.0
@@ -28,8 +30,15 @@ var jump_timer = 0.0
 
 func grab_mushroom() -> void:
 	GameState.powerup = GameState.Powerup.MUSHROOM
+	GameState.score += 1000
 	block_ray = $LargeBlockRay
 	powerup_animator.play("Grow To Large")
+
+	var points = PointsScene.instantiate()
+	points.set_value(1000)
+	points.position.x = position.x - half_width + 8.0
+	points.position.y = position.y - 11.0
+	get_tree().current_scene.add_child(points)
 
 func grab_extra_life() -> void:
 	GameState.lives += 1
