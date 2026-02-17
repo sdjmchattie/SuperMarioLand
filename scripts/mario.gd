@@ -45,6 +45,10 @@ func grab_extra_life() -> void:
 	GameState.lives += 1
 	_show_points()
 
+func grab_star() -> void:
+	GameState.score += 1000
+	_show_points(1000)
+
 func _ready() -> void:
 	half_width = (
 		float(sprites[0].texture.get_width()) /

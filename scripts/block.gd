@@ -13,6 +13,7 @@ const CoinScene := preload("res://scenes/powerups/coin.tscn")
 const MushroomScene := preload("res://scenes/powerups/mushroom.tscn")
 const FlowerScene := preload("res://scenes/powerups/flower.tscn")
 const ExtraLifeScene := preload("res://scenes/powerups/extra_life.tscn")
+const StarScene := preload("res://scenes/powerups/star.tscn")
 
 const BUMP_SPEED := 0.07
 
@@ -66,6 +67,13 @@ func _spawn_extra_life() -> void:
 	extra_life.position = global_position
 	get_tree().current_scene.add_child(extra_life)
 
+func _spawn_star() -> void:
+	type = Type.USED
+
+	var star = StarScene.instantiate()
+	star.position = global_position
+	get_tree().current_scene.add_child(star)
+
 func on_bumped() -> void:
 	if type == Type.USED:
 		return
@@ -95,4 +103,4 @@ func on_bumped() -> void:
 		"Life":
 			_spawn_extra_life()
 		"Invincibility":
-			pass
+			_spawn_star()
