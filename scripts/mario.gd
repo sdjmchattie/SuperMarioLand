@@ -31,6 +31,7 @@ var half_width: float
 var jump_timer = 0.0
 var jumped_while_running := false
 var jump_direction := 0.0
+var momentum_cancelled := false
 
 func grab_mushroom() -> void:
 	GameState.powerup = GameState.Powerup.MUSHROOM
@@ -94,6 +95,14 @@ func _show_points(points: int = 0) -> void:
 
 func _horizontal_movement(delta: float) -> void:
 	var direction := Input.get_axis("move_left", "move_right")
+
+	# Detect opposite direction released while airborne — cancels momentum drift
+	if mario_state != MarioState.ON_GROUND and jump_direction != 0:
+		if Input.is_action_just_released("move_left") and jump_direction > 0:
+			momentum_cancelled = true
+		elif Input.is_action_just_released("move_right") and jump_direction < 0:
+			momentum_cancelled = true
+
 	if direction:
 		for sprite in sprites:
 			sprite.flip_h = direction < 0
@@ -106,6 +115,9 @@ func _horizontal_movement(delta: float) -> void:
 		elif jumped_while_running and Input.is_action_pressed("run_fire"):
 			speed = horizontal_speed * run_multiplier
 		velocity.x = direction * speed
+	elif mario_state != MarioState.ON_GROUND and jump_direction != 0 and not momentum_cancelled:
+		# Drift at half speed in the direction Mario was moving when he jumped
+		velocity.x = jump_direction * horizontal_speed * 0.5
 	else:
 		velocity.x = 0.0
 
@@ -132,6 +144,7 @@ func _transition_jump_ascent() -> void:
 	var direction := Input.get_axis("move_left", "move_right")
 	jumped_while_running = Input.is_action_pressed("run_fire") and direction != 0
 	jump_direction = sign(direction)
+	momentum_cancelled = false
 	mario_state = MarioState.JUMP_ASCENT
 	movement_animator.play("jump")
 	velocity.y = -1 * terminal_jump_speed
