@@ -11,6 +11,7 @@ enum Type {
 
 const CoinScene := preload("res://scenes/powerups/coin.tscn")
 const MushroomScene := preload("res://scenes/powerups/mushroom.tscn")
+const FlowerScene := preload("res://scenes/powerups/flower.tscn")
 const ExtraLifeScene := preload("res://scenes/powerups/extra_life.tscn")
 
 const BUMP_SPEED := 0.07
@@ -51,6 +52,13 @@ func _spawn_mushroom() -> void:
 	mushroom.position = global_position
 	get_tree().current_scene.add_child(mushroom)
 
+func _spawn_flower() -> void:
+	type = Type.USED
+
+	var flower = FlowerScene.instantiate()
+	flower.position = global_position
+	get_tree().current_scene.add_child(flower)
+
 func _spawn_extra_life() -> void:
 	type = Type.USED
 
@@ -80,7 +88,10 @@ func on_bumped() -> void:
 				coin_timer.start()
 			_spawn_coin()
 		"Upgrade":
-			_spawn_mushroom()
+			if GameState.powerup == GameState.Powerup.NONE:
+				_spawn_mushroom()
+			elif GameState.powerup == GameState.Powerup.MUSHROOM:
+				_spawn_flower()
 		"Life":
 			_spawn_extra_life()
 		"Invincibility":

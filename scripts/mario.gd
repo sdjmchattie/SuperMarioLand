@@ -36,6 +36,11 @@ func grab_mushroom() -> void:
 	block_ray = $LargeBlockRay
 	powerup_animator.play("Grow To Large")
 
+func grab_flower() -> void:
+	GameState.powerup = GameState.Powerup.FLOWER
+	GameState.score += 1000
+	_show_points(1000)
+
 func grab_extra_life() -> void:
 	GameState.lives += 1
 	_show_points()
