@@ -9,6 +9,7 @@ enum Type {
 	HIDDEN,
 }
 
+const BrokenBrickScene := preload("res://scenes/broken_brick.tscn")
 const CoinScene := preload("res://scenes/powerups/coin.tscn")
 const MushroomScene := preload("res://scenes/powerups/mushroom.tscn")
 const FlowerScene := preload("res://scenes/powerups/flower.tscn")
@@ -74,6 +75,12 @@ func _spawn_star() -> void:
 	star.position = global_position
 	get_tree().current_scene.add_child(star)
 
+func _break_brick() -> void:
+	var debris := BrokenBrickScene.instantiate()
+	debris.global_position = global_position + Vector2(0, -8)
+	get_tree().current_scene.add_child(debris)
+	queue_free()
+
 func on_bumped() -> void:
 	if type == Type.USED:
 		return
@@ -83,7 +90,7 @@ func on_bumped() -> void:
 			if GameState.powerup == GameState.Powerup.NONE or spawns != "":
 				_jump_sprite()
 			else:
-				pass
+				_break_brick()
 		Type.QUESTION:
 			_jump_sprite()
 

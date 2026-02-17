@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://h3r5bbjhgdqk"]
+
+[ext_resource type="Texture2D" uid="uid://fw8sq2migu4k" path="res://images/destroyed_block.png" id="1_texture"]
+[ext_resource type="Script" uid="uid://2cjaopqe1yt2" path="res://scripts/broken_brick.gd" id="2_script"]
+
+[node name="BrokenBrick" type="Node2D"]
+script = ExtResource("2_script")
+
+[node name="LeftHigh" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-4, -4)
+texture = ExtResource("1_texture")
+hframes = 2
+
+[node name="LeftLow" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-4, 0)
+texture = ExtResource("1_texture")
+hframes = 2
+
+[node name="RightHigh" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(4, -4)
+texture = ExtResource("1_texture")
+hframes = 2
+frame = 1
+
+[node name="RightLow" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(4, 0)
+texture = ExtResource("1_texture")
+hframes = 2
+frame = 1
