@@ -18,6 +18,7 @@ const PointsScene := preload("res://scenes/points.tscn")
 @export var apex_gravity := 550.0
 @export var max_jump_time := 0.2
 @export var horizontal_speed := 60.0
+@export var run_multiplier := 1.5
 
 @onready var sprites: Array[Sprite2D] = [$SmallSprite, $LargeSprite]
 @onready var block_ray: RayCast2D = $SmallBlockRay
@@ -28,6 +29,8 @@ const PointsScene := preload("res://scenes/points.tscn")
 var mario_state: MarioState = MarioState.ON_GROUND
 var half_width: float
 var jump_timer = 0.0
+var jumped_while_running := false
+var jump_direction := 0.0
 
 func grab_mushroom() -> void:
 	GameState.powerup = GameState.Powerup.MUSHROOM
@@ -90,13 +93,19 @@ func _show_points(points: int = 0) -> void:
 	get_tree().current_scene.add_child(point_scene)
 
 func _horizontal_movement(delta: float) -> void:
-		# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis("move_left", "move_right")
 	if direction:
 		for sprite in sprites:
 			sprite.flip_h = direction < 0
-		velocity.x = direction * horizontal_speed
+		if jumped_while_running and sign(direction) != jump_direction:
+			jumped_while_running = false
+		var speed := horizontal_speed
+		if mario_state == MarioState.ON_GROUND:
+			if Input.is_action_pressed("run_fire"):
+				speed = horizontal_speed * run_multiplier
+		elif jumped_while_running and Input.is_action_pressed("run_fire"):
+			speed = horizontal_speed * run_multiplier
+		velocity.x = direction * speed
 	else:
 		velocity.x = 0.0
 
@@ -120,6 +129,9 @@ func _check_grounded() -> void:
 		mario_state = MarioState.ON_GROUND
 
 func _transition_jump_ascent() -> void:
+	var direction := Input.get_axis("move_left", "move_right")
+	jumped_while_running = Input.is_action_pressed("run_fire") and direction != 0
+	jump_direction = sign(direction)
 	mario_state = MarioState.JUMP_ASCENT
 	movement_animator.play("jump")
 	velocity.y = -1 * terminal_jump_speed
