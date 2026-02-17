@@ -23,6 +23,7 @@ const PointsScene := preload("res://scenes/points.tscn")
 @onready var block_ray: RayCast2D = $SmallBlockRay
 @onready var movement_animator: AnimationPlayer = $MovementAnimation
 @onready var powerup_animator: AnimationPlayer = $PowerupAnimation
+@onready var invincibility_animator: AnimationPlayer = $InvincibilityAnimation
 
 var mario_state: MarioState = MarioState.ON_GROUND
 var half_width: float
@@ -48,6 +49,13 @@ func grab_extra_life() -> void:
 func grab_star() -> void:
 	GameState.score += 1000
 	_show_points(1000)
+	GameState.invincible = true
+	invincibility_animator.play("Flash")
+	get_tree().create_timer(15.0).timeout.connect(_end_invincibility)
+
+func _end_invincibility() -> void:
+	invincibility_animator.play("RESET")
+	GameState.invincible = false
 
 func _ready() -> void:
 	half_width = (

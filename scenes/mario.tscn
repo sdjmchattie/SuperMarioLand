@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c388a3iehwo1b"]
+[gd_scene load_steps=18 format=3 uid="uid://c388a3iehwo1b"]
 
 [ext_resource type="Script" uid="uid://nlix1k1hrlgr" path="res://scripts/mario.gd" id="1_bvgp0"]
 [ext_resource type="Texture2D" uid="uid://dejbbq8oouglv" path="res://images/mario-small.png" id="2_5gbmu"]
@@ -363,6 +363,45 @@ _data = {
 &"Shrink To Small": SubResource("Animation_rgcl4")
 }
 
+[sub_resource type="Animation" id="Animation_flash_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_flash"]
+resource_name = "Flash"
+length = 0.1
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_flash"]
+_data = {
+&"Flash": SubResource("Animation_flash"),
+&"RESET": SubResource("Animation_flash_reset")
+}
+
 [node name="Mario" type="CharacterBody2D"]
 z_index = 60
 collision_layer = 2
@@ -410,4 +449,9 @@ libraries = {
 [node name="PowerupAnimation" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_rgcl4")
+}
+
+[node name="InvincibilityAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_flash")
 }
