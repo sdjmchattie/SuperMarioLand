@@ -19,8 +19,6 @@ const PointsScene := preload("res://scenes/points.tscn")
 @export var max_jump_time := 0.2
 @export var horizontal_speed := 60.0
 @export var run_multiplier := 1.5
-@export var turn_pause_time := 0.2
-@export var release_grace_time := 0.05
 
 @onready var sprites: Array[Sprite2D] = [$SmallSprite, $LargeSprite]
 @onready var block_ray: RayCast2D = $SmallBlockRay
@@ -33,9 +31,6 @@ var half_width: float
 var jump_timer = 0.0
 var jumped_while_running := false
 var jump_direction := 0.0
-var turn_timer := 0.0
-var move_direction := 0.0
-var release_grace_timer := 0.0
 
 func grab_mushroom() -> void:
 	GameState.powerup = GameState.Powerup.MUSHROOM
@@ -99,32 +94,9 @@ func _show_points(points: int = 0) -> void:
 
 func _horizontal_movement(delta: float) -> void:
 	var direction := Input.get_axis("move_left", "move_right")
-
-	# Track how recently a direction was released, so reversals still register
-	if direction:
-		release_grace_timer = 0.0
-	elif move_direction != 0.0:
-		release_grace_timer += delta
-		if release_grace_timer >= release_grace_time:
-			move_direction = 0.0
-			release_grace_timer = 0.0
-
-	# Detect direction reversal (including within grace window)
-	if direction and move_direction != 0.0 and sign(direction) != move_direction:
-		turn_timer = turn_pause_time
-		move_direction = sign(direction)
-		jumped_while_running = false
-
-	if turn_timer > 0.0:
-		turn_timer -= delta
-
 	if direction:
 		for sprite in sprites:
 			sprite.flip_h = direction < 0
-
-	if turn_timer > 0.0:
-		velocity.x = 0.0
-	elif direction:
 		if jumped_while_running and sign(direction) != jump_direction:
 			jumped_while_running = false
 		var speed := horizontal_speed
@@ -136,9 +108,6 @@ func _horizontal_movement(delta: float) -> void:
 		velocity.x = direction * speed
 	else:
 		velocity.x = 0.0
-
-	if direction and turn_timer <= 0.0:
-		move_direction = sign(direction)
 
 	var distance_x = velocity.x * delta
 	var new_left = position.x + distance_x - half_width
@@ -181,7 +150,7 @@ func _physics_on_ground(delta: float) -> void:
 	_horizontal_movement(delta)
 	move_and_slide()
 
-	if not Input.get_axis("move_left", "move_right") or turn_timer > 0.0:
+	if not Input.get_axis("move_left", "move_right"):
 		movement_animator.play("idle")
 	else:
 		movement_animator.play("walk")
