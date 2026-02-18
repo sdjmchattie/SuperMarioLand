@@ -31,7 +31,7 @@ const MARIO_EDGE_OFFSET_Y := 8
 
 var mario_state: MarioState = MarioState.ON_GROUND
 var half_width: float
-var jump_timer = 0.0
+var jump_timer := 0.0
 var jumped_while_running := false
 var jump_direction := 0.0
 var momentum_cancelled := false
@@ -155,7 +155,7 @@ func _transition_jump_ascent() -> void:
 	momentum_cancelled = false
 	mario_state = MarioState.JUMP_ASCENT
 	movement_animator.play("jump")
-	velocity.y = -1 * terminal_jump_speed
+	velocity.y = -terminal_jump_speed
 	jump_timer = 0.0
 
 func _transition_ledge_descent() -> void:
@@ -191,7 +191,6 @@ func _physics_on_ground(delta: float) -> void:
 		_transition_jump_ascent()
 	elif not is_on_floor():
 		_transition_ledge_descent()
-
 
 func _physics_jump_ascent(delta: float) -> void:
 	_horizontal_movement(delta)
