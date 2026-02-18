@@ -36,7 +36,7 @@ Defined in project.godot layer_names:
 **When adding new elements**: Set collision/mask layers appropriately to avoid unwanted interactions.
 
 ### Animation System
-- Multiple `AnimationPlayer` nodes per character (e.g., mario.gd has $MovementAnimation and $PowerupAnimation)
+- Multiple `AnimationPlayer` nodes per character (e.g., mario.gd has $MovementAnimation, $PowerupAnimation, and $InvincibilityAnimation)
 - Use separate animators for different animation purposes to allow concurrent animations
 - Call `animator.play("animation_name")` to trigger animations
 
@@ -66,8 +66,8 @@ func update_mario_pos(left: float, right: float) -> bool:
 ```
 
 ### Variable Naming
-- `_private_vars` with underscore prefix for internal state
-- `exported_vars` without underscore for inspector-exposed properties
+- Variables have no underscore prefix — this applies to all vars including `@onready` node references
+- Private methods use underscore prefix: `_physics_on_ground()`, `_spawn_coin()`, `_show_points()`
 - Use `@export` for tweakable gameplay parameters
 
 ### Signal Naming
@@ -114,3 +114,4 @@ Signals describe state changes: `score_changed`, `lives_changed`, `coins_changed
 - Use `RayCast2D` for directed collision checks (e.g., block bumping from below)
 - Always consider the Game Boy viewport (160x144) when positioning elements
 - Test that screen boundaries work correctly with `camera.update_mario_pos()`
+- Use `add_sibling(node)` to spawn temporary nodes (coins, powerups, effects, debris) — do not use `get_tree().current_scene.add_child()`
