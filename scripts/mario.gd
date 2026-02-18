@@ -11,11 +11,14 @@ enum MarioState {
 }
 
 const PointsScene := preload("res://scenes/points.tscn")
+const VIEWPORT_HEIGHT := 144
+const MARIO_EDGE_OFFSET_Y := 8
 
 @export var camera: Camera2D
 @export var terminal_jump_speed := 108.0
 @export var terminal_ledge_fall_speed := 175.0
 @export var apex_gravity := 550.0
+@export var death_gravity := 200.0
 @export var max_jump_time := 0.2
 @export var horizontal_speed := 60.0
 @export var run_multiplier := 1.5
@@ -70,6 +73,11 @@ func _ready() -> void:
 	)
 
 func _physics_process(delta: float) -> void:
+	if mario_state != MarioState.DEAD and position.y >= camera.position.y + VIEWPORT_HEIGHT + MARIO_EDGE_OFFSET_Y:
+		mario_state = MarioState.DEAD
+		_begin_level_reload()
+		return
+
 	match mario_state:
 		MarioState.ON_GROUND:
 			_physics_on_ground(delta)
@@ -84,7 +92,7 @@ func _physics_process(delta: float) -> void:
 		MarioState.PIPE_ENTRY:
 			pass
 		MarioState.DEAD:
-			pass
+			_physics_dead(delta)
 
 func _show_points(points: int = 0) -> void:
 	var point_scene = PointsScene.instantiate()
@@ -159,6 +167,17 @@ func _transition_jump_descent() -> void:
 	mario_state = MarioState.JUMP_DESCENT
 	velocity.y = terminal_jump_speed
 
+func _transition_dead() -> void:
+	mario_state = MarioState.DEAD
+	collision_layer = 0
+	collision_mask = 0
+	z_index = 100
+	powerup_animator.play("RESET")
+	invincibility_animator.play("RESET")
+	movement_animator.play("dead")
+	velocity.x = 0.0
+	velocity.y = -terminal_jump_speed
+
 func _physics_on_ground(delta: float) -> void:
 	_horizontal_movement(delta)
 	move_and_slide()
@@ -198,3 +217,16 @@ func _physics_descent(delta: float) -> void:
 	_horizontal_movement(delta)
 	move_and_slide()
 	_check_grounded()
+
+func _physics_dead(delta: float) -> void:
+	velocity.y += death_gravity * delta
+	position.y += velocity.y * delta
+	if position.y > camera.position.y + VIEWPORT_HEIGHT + MARIO_EDGE_OFFSET_Y:
+		_begin_level_reload()
+
+func _begin_level_reload() -> void:
+	set_physics_process(false)
+	await get_tree().create_timer(1.0).timeout
+	GameState.lives -= 1
+	GameState.reset_after_death()
+	get_tree().reload_current_scene()

@@ -44,6 +44,11 @@ var coins := 0:
 var powerup := Powerup.NONE
 var invincible := false
 
+func reset_after_death():
+	time_remaining = 400
+	powerup = Powerup.NONE
+	invincible = false
+
 func _on_time_decrease() -> void:
 	time_remaining -= 1
 	if time_remaining == 0:
