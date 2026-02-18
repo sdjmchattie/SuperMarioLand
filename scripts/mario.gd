@@ -91,7 +91,7 @@ func _show_points(points: int = 0) -> void:
 	point_scene.set_value(points)
 	point_scene.position.x = position.x - half_width + 8.0
 	point_scene.position.y = position.y - 11.0
-	get_tree().current_scene.add_child(point_scene)
+	add_sibling(point_scene)
 
 func _horizontal_movement(delta: float) -> void:
 	var direction := Input.get_axis("move_left", "move_right")

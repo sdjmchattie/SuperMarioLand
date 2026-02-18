@@ -45,40 +45,40 @@ func _spawn_coin() -> void:
 	var coin = CoinScene.instantiate()
 	coin.position = global_position
 	coin.position.y -= 7
-	get_tree().current_scene.add_child(coin)
+	add_sibling(coin)
 
 func _spawn_mushroom() -> void:
 	type = Type.USED
 
 	var mushroom = MushroomScene.instantiate()
 	mushroom.position = global_position
-	get_tree().current_scene.add_child(mushroom)
+	add_sibling(mushroom)
 
 func _spawn_flower() -> void:
 	type = Type.USED
 
 	var flower = FlowerScene.instantiate()
 	flower.position = global_position
-	get_tree().current_scene.add_child(flower)
+	add_sibling(flower)
 
 func _spawn_extra_life() -> void:
 	type = Type.USED
 
 	var extra_life = ExtraLifeScene.instantiate()
 	extra_life.position = global_position
-	get_tree().current_scene.add_child(extra_life)
+	add_sibling(extra_life)
 
 func _spawn_star() -> void:
 	type = Type.USED
 
 	var star = StarScene.instantiate()
 	star.position = global_position
-	get_tree().current_scene.add_child(star)
+	add_sibling(star)
 
 func _break_brick() -> void:
 	var debris := BrokenBrickScene.instantiate()
 	debris.global_position = global_position + Vector2(0, -8)
-	get_tree().current_scene.add_child(debris)
+	add_sibling(debris)
 	queue_free()
 
 func on_bumped() -> void:
